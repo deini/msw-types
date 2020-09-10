@@ -1,5 +1,5 @@
 import { setupServer } from 'msw/node';
-import { rest } from 'msw';
+import { rest, setupWorker } from 'msw';
 
 interface LoginRequestBodyType {
   username: string;
@@ -25,4 +25,11 @@ setupServer(
       return res(ctx.json({ accessToken: 'abc-123' }));
     }
   )
+);
+
+// This also breaks
+setupWorker(
+  rest.post('/login', (req, res, ctx) => {
+    return res(ctx.json({ accessToken: 'abc-123' }));
+  })
 );
